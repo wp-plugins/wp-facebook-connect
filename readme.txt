@@ -1,4 +1,4 @@
-=== Facebook connect ===
+=== Facebook Connect ===
 Contributors: mufasa, valentinas
 Tags: facebook, facebook connect, fb connect, fbconnect, fb-connect, login.
 Requires at least: 3.0
