@@ -38,4 +38,9 @@ if( FACEBOOK_SECRET == '' || FACEBOOK_APP_ID == '' ){
 	//setup widget
 	add_shortcode('fb_login', 'fb_login');
 }
+
+//include uninstal function
+require_once($plugin_path . 'uninstall.php');
+//resister uninstall script
+register_deactivation_hook(__FILE__, 'uninstall_facebook_connect');
 ?>
