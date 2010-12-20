@@ -52,33 +52,50 @@ function get_facebook_cookie($app_id, $application_secret) {
 //this is the main function that performs the login or user creation process
 function fb_login_user(){
 	//only do when user is not logged in
-	if(!is_user_logged_in()){
-		global $wpdb;
-		//@todo: investigate: does this gets included doing regular request?
-		require_once( ABSPATH . 'wp-includes/registration.php' );
-		//mmmm, cookie
-		$cookie = get_facebook_cookie(FACEBOOK_APP_ID, FACEBOOK_SECRET);
-		//if we have cookie, then try to get user data
-		if ($cookie) {
-			//get user data
-		    $user = json_decode(file_get_contents('https://graph.facebook.com/me?access_token=' . $cookie['access_token']));
-		    //if user data is empty, then nothing will happen
-		    if( !empty($user) ){
-		    	//this should never happen, since email address is required to register in FB, but i put it here just in case of API changes or some other disaster
-			    if( !isset($user->email) || empty($user->email) )
-			    	wp_die("Error: failed to get your email from Facebook!");
-			    //check if user has account in the website. get id and login
-			    //@todo: change these to use only one sql query
-			    $existing_user = absint($wpdb->get_var( 'SELECT ID FROM ' . $wpdb->users . ' WHERE user_email = "' . $user->email . '"' ));
-			    $existing_user_login = $wpdb->get_var( 'SELECT user_login FROM ' . $wpdb->users . ' WHERE user_email = "' . $user->email . '"' );
-			    //if the user egists - set cookie, do wp_login, redirect and exit
+	global $wpdb;
+	//@todo: investigate: does this gets included doing regular request?
+	require_once( ABSPATH . 'wp-includes/registration.php' );
+	//mmmm, cookie
+	$cookie = get_facebook_cookie(FACEBOOK_APP_ID, FACEBOOK_SECRET);
+	//if we have cookie, then try to get user data
+	if ($cookie) {
+		//get user data
+	    $user = json_decode(file_get_contents('https://graph.facebook.com/me?access_token=' . $cookie['access_token']));
+	    //if user data is empty, then nothing will happen
+	    if( !empty($user) ){
+	    	//this should never happen, since email address is required to register in FB
+	    	//I put it here just in case of API changes or some other disaster, like wrong API key or secret
+		    if( !isset($user->email) || empty($user->email) )
+		    	do_action('fb_connect_get_email_error');
+		    	wp_die("Error: failed to get your email from Facebook!");
+
+	    	//if user is logged in, then we just need to associate FB account with WordPress account
+	    	if( is_user_logged_in() ){
+    			global $current_user;
+				get_currentuserinfo();
+				if($user->email == $current_user->user_email) {
+					//if FB email is the same as WP email we don't need to do anything.
+					do_action('fb_connect_wp_fb_same_email');
+					return true;
+				} else {
+					//else we need to set fb_email in user meta, this will be used to identify this user
+					do_action('fb_connect_wp_fb_different_email');
+					update_user_meta( $current_user->ID, 'fb_email', $user->email );
+					//that's it, we don't need to do anything else, because the user is already logged in.
+					return true;
+				}
+	    	}else{
+			    //check if user has account in the website. get id
+			    $existing_user = absint($wpdb->get_var( 'SELECT `u`.`ID` FROM `' . $wpdb->users . '` `u` JOIN `' . $wpdb->usermeta . '` `m` ON `u`.`ID` = `m`.`user_id`  WHERE user_email = "' . $user->email . '" OR (`m`.`meta_key` = "fb_email" `m`.`meta_value` = "' . $user->email . '" ) LIMIT 1 ' ));
+			    //if the user exists - set cookie, do wp_login, redirect and exit
 			    if( $existing_user > 0 ){
-			    	wp_set_auth_cookie($existing_user, true, false);
-			    	do_action('wp_login', $existing_user_login);
+			    	do_action('fb_connect_fb_same_email');
+			    	wp_set_auth_cookie($existing_user->ID, true, false);
 			    	wp_redirect(wp_get_referer());
 			    	exit();
 			    //if user don't exist - create one and do all the same stuff: cookie, wp_login, redirect, exit
 				} else {
+					do_action('fb_connect_fb_new_email');
 					//sanitize username
 					$username = sanitize_user($user->first_name, true);
 	
@@ -105,18 +122,20 @@ function fb_login_user(){
 						'last_name'		=>	$user->last_name,
 						'role'			=>	'subscriber'
 					);
+					$userdata = apply_filters('fb_connect_new_userdata', $userdata, $user);
 					//create new user
 					$new_user = absint(wp_insert_user($userdata));
 					//if user created succesfully - log in and reload
 					if( $new_user > 0 ){
 						wp_set_auth_cookie($existing_user, true, false);
-				    	do_action('wp_login', $existing_user_login);
 				    	wp_redirect(wp_get_referer());
 				    	exit();
+					} else {
+						wp_die('Facebook Connect: Error creating new user!');
 					}
-				}
-			}
-	    }
+				}	    	
+	    	}
+		}
     }
 }
 ?>
