@@ -25,6 +25,12 @@ Inspired by these Plugins that use the old depreciated Facebook API:
 http://wordpress.org/extend/plugins/wp-facebookconnect/
 http://wordpress.org/extend/plugins/bp-fbconnect/
 
+== Screenshots ==
+
+1. Example of shortcodes added to post
+2. Buttons rendered for users that are not logged in
+3. Buttons rendered for users that are logged in
+
 == Installation ==
 
 
@@ -33,12 +39,17 @@ http://wordpress.org/extend/plugins/bp-fbconnect/
 1. Go to Settings->FB connect and set your facebook application API key and application secret
 1. Add a widget, or place a shortcode and start connecting!
 
-The shortcode is `[fb_login]`. You can also specify custom size (available options: small, medium, large, xlarge), login text and logout text. Example:
-`[fb_login size='xlarge' login_text='Logout' logout_text='Logout']`
+The shortcode is `[fb_login]`. You can also specify custom size (available options: small, medium, large, xlarge), login text, connect text and logout text. Example:
+`[fb_login size='xlarge' login_text='Logout' logout_text='Logout' connect_text='Connect']`
 You can place this anywhere in post or page. You can also place the shortcode in your template, however it's a bit different, example:
 `<?php do_shortcode("[fb_login size='xlarge' login_text='Logout' logout_text='Logout']"); ?>`
 
 == Changelog ==
+
+= 1.1 =
+* Split code to 5 files: fb-connect.php (main file), function.php, options.php, shortcode.php and widget.php. Makes it easier to maintain and read.
+* Add login (or logout) button to all users. Also if you are logged in to WP, but not authorized with FB you will see "Connect" button which will link your WP account to your FB acccount
+* Add few hooks for plugin developers (those of you who are good at WordPress will find hooks themselves, and for those who are not so good i will post instructions later)
 
 = 1.0 =
 * Big bang. Time and space starts here.
