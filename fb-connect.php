@@ -39,8 +39,11 @@ if( FACEBOOK_SECRET == '' || FACEBOOK_APP_ID == '' ){
 	add_shortcode('fb_login', 'fb_login');
 }
 
-//include uninstal function
-require_once($plugin_path . 'uninstall.php');
-//resister uninstall script
+//uninstal function
+function uninstall_facebook_connect(){
+	delete_option('fbconnect_api_id');
+	delete_option('fbconnect_secret');
+}
+//resister uninstall function
 register_uninstall_hook(__FILE__, 'uninstall_facebook_connect');
 ?>
