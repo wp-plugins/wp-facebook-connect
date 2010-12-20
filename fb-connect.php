@@ -42,5 +42,5 @@ if( FACEBOOK_SECRET == '' || FACEBOOK_APP_ID == '' ){
 //include uninstal function
 require_once($plugin_path . 'uninstall.php');
 //resister uninstall script
-register_deactivation_hook(__FILE__, 'uninstall_facebook_connect');
+register_uninstall_hook(__FILE__, 'uninstall_facebook_connect');
 ?>
