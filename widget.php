@@ -13,14 +13,15 @@ class FB_Connect_Widget extends WP_Widget {
     function widget($args, $instance) {	
         extract( $args );
         $title = apply_filters('widget_title', $instance['title']);
-        $size = $instance['size'];
-        $login_text = $instance['login_text'];
-        $logout_text = $instance['logout_text'];
+        $size = $instance['size']?$instance['size']:'medium';
+        $login_text = $instance['login_text']?$instance['login_text']:'Login';
+        $logout_text = $instance['logout_text']?$instance['logout_text']:'Logout';
+        $connect_text = $instance['connect_text']?$instance['connect_text']:'Connect';
         ?>
               <?php echo $before_widget; ?>
                   <?php if ( $title )
                         echo $before_title . $title . $after_title; ?>
-                  <div style="text-align:center; margin-bottom:10px;"><?php do_shortcode("[fb_login size='$size' login_text='$login_text' logout_text='$logout_text']"); ?></div>
+                  <div style="text-align:center; margin-bottom:10px;"><?php do_shortcode("[fb_login size='$size' connect_text='$connect_text' login_text='$login_text' logout_text='$logout_text']"); ?></div>
               <?php echo $after_widget; ?>
         <?php
     }
@@ -32,6 +33,7 @@ class FB_Connect_Widget extends WP_Widget {
 	$instance['size'] = strip_tags($new_instance['size']);
 	$instance['login_text'] = strip_tags($new_instance['login_text']);
 	$instance['logout_text'] = strip_tags($new_instance['logout_text']);
+	$instance['connect_text'] = strip_tags($new_instance['connect_text']);
         return $instance;
     }
 
@@ -41,6 +43,7 @@ class FB_Connect_Widget extends WP_Widget {
         $size = esc_attr($instance['size']);
         $login_text = esc_attr($instance['login_text']);
         $logout_text = esc_attr($instance['logout_text']);
+        $connect_text = esc_attr($instance['connect_text']);
         ?>
             <p>
             	<label for="<?php echo $this->get_field_id('title'); ?>">
@@ -58,6 +61,12 @@ class FB_Connect_Widget extends WP_Widget {
             	<label for="<?php echo $this->get_field_id('logout_text'); ?>">
             		<?php _e('Logout button text:'); ?>
             		<input class="widefat" id="<?php echo $this->get_field_id('logout_text'); ?>" name="<?php echo $this->get_field_name('logout_text'); ?>" type="text" value="<?php echo $logout_text; ?>" />
+            	</label>
+            </p>
+            <p>
+            	<label for="<?php echo $this->get_field_id('connect_text'); ?>">
+            		<?php _e('Connect button text:'); ?>
+            		<input class="widefat" id="<?php echo $this->get_field_id('connect_text'); ?>" name="<?php echo $this->get_field_name('connect_text'); ?>" type="text" value="<?php echo $connect_text; ?>" />
             	</label>
             </p>
             <p>

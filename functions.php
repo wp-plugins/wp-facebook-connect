@@ -91,21 +91,22 @@ function fb_login_user(){
 	//if we have cookie, then try to get user data
 	if ($cookie) {
 		//get user data
-	    $user = json_decode(file_get_contents('https://graph.facebook.com/me?access_token=' . $cookie['access_token']));
+	    $user = json_decode(@file_get_contents('https://graph.facebook.com/me?access_token=' . $cookie['access_token']));
 	    //if user data is empty, then nothing will happen
 	    if( !empty($user) ){
 	    	//this should never happen, since email address is required to register in FB
 	    	//I put it here just in case of API changes or some other disaster, like wrong API key or secret
 		    if( !isset($user->email) || empty($user->email) ){
 		    	do_action('fb_connect_get_email_error');
-		    	wp_die("Error: failed to get your email from Facebook!");
+		    	//do not use wp_die here, because it adds styles which can mess up the whole looks of the site
+		    	die("Error: failed to get your email from Facebook!");
 		    }
 
 	    	//if user is logged in, then we just need to associate FB account with WordPress account
 	    	if( is_user_logged_in() ){
     			global $current_user;
 				get_currentuserinfo();
-				if($user->email == $current_user->user_email) {
+				if( $user->email == $current_user->user_email ) {
 					//if FB email is the same as WP email we don't need to do anything.
 					do_action('fb_connect_wp_fb_same_email');
 					return true;
@@ -118,11 +119,13 @@ function fb_login_user(){
 				}
 	    	}else{
 			    //check if user has account in the website. get id
-			    $existing_user = absint($wpdb->get_var( 'SELECT `u`.`ID` FROM `' . $wpdb->users . '` `u` JOIN `' . $wpdb->usermeta . '` `m` ON `u`.`ID` = `m`.`user_id`  WHERE user_email = "' . $user->email . '" OR (`m`.`meta_key` = "fb_email" `m`.`meta_value` = "' . $user->email . '" ) LIMIT 1 ' ));
+			    $existing_user = absint($wpdb->get_var( 'SELECT `u`.`ID` FROM `' . $wpdb->users . '` `u` JOIN `' . $wpdb->usermeta . '` `m` ON `u`.`ID` = `m`.`user_id`  WHERE user_email = "' . $user->email . '" OR (`m`.`meta_key` = "fb_email" AND `m`.`meta_value` = "' . $user->email . '" ) LIMIT 1 ' ));
 			    //if the user exists - set cookie, do wp_login, redirect and exit
 			    if( $existing_user > 0 ){
+			    	$user_info = get_userdata($existing_user);
 			    	do_action('fb_connect_fb_same_email');
-			    	wp_set_auth_cookie($existing_user->ID, true, false);
+			    	wp_set_auth_cookie($existing_user, true, false);
+			    	do_action('wp_login', $user_info->user_login);
 			    	wp_redirect(wp_get_referer());
 			    	exit();
 			    //if user don't exist - create one and do all the same stuff: cookie, wp_login, redirect, exit
@@ -159,7 +162,9 @@ function fb_login_user(){
 					$new_user = absint(wp_insert_user($userdata));
 					//if user created succesfully - log in and reload
 					if( $new_user > 0 ){
-						wp_set_auth_cookie($existing_user, true, false);
+						$user_info = get_userdata($new_user);
+						wp_set_auth_cookie($new_user, true, false);
+						do_action('wp_login', $user_info->user_login);
 				    	wp_redirect(wp_get_referer());
 				    	exit();
 					} else {
