@@ -3,7 +3,7 @@ Contributors: mufasa, valentinas
 Tags: facebook, facebook connect, fb connect, fbconnect, fb-connect, login.
 Requires at least: 3.0
 Tested up to: 3.01
-Stable tag: 1.0
+Stable tag: 1.1
 
 A beautifully crafted light weight Facebook Connect Plugin that uses the new Facebook API to create WordPress user accounts.
 

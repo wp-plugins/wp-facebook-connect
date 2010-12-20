@@ -1,6 +1,10 @@
 <?php 
 /*
-Plugin name: facebook connect
+Plugin Name: Facebook Connect
+Description: A beautifully crafted light weight Facebook Connect Plugin that uses the new Facebook API to create WordPress user accounts.
+Version: 1.1
+Author: mufasa, valentinas
+License: GPL2
 */
 
 //set the plugin path
