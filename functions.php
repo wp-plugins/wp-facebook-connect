@@ -32,8 +32,6 @@ function fb_footer(){
 //taken from here: http://developers.facebook.com/docs/guides/web
 //gets facebook cookie (yummy thing that is created when user is authenticated with FB in your website and destroyed when user is logged out of FB)
 function get_facebook_cookie($app_id, $application_secret) {
-  if( FACEBOOK_APP_ID == '' || FACEBOOK_SECRET == '' )
-  	return false;
   $args = array();
   parse_str(trim($_COOKIE['fbs_' . $app_id], '\\"'), $args);
   ksort($args);
@@ -65,9 +63,10 @@ function fb_login_user(){
 	    if( !empty($user) ){
 	    	//this should never happen, since email address is required to register in FB
 	    	//I put it here just in case of API changes or some other disaster, like wrong API key or secret
-		    if( !isset($user->email) || empty($user->email) )
+		    if( !isset($user->email) || empty($user->email) ){
 		    	do_action('fb_connect_get_email_error');
 		    	wp_die("Error: failed to get your email from Facebook!");
+		    }
 
 	    	//if user is logged in, then we just need to associate FB account with WordPress account
 	    	if( is_user_logged_in() ){
