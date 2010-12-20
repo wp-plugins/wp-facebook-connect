@@ -1,7 +1,14 @@
 <?php
-//facebook_header function
-//taken from here: http://developers.facebook.com/docs/guides/web
-//some JavaScript in header. this is required
+/**
+ * facebook_header()
+ *
+ * @package fb-connect
+ * @since 1.0
+ *
+ * javascript for header
+ * taken from here: http://developers.facebook.com/docs/guides/web
+ *
+ */
 function facebook_header(){ 
 ?>
 <script src="http://connect.facebook.net/en_US/all.js"></script>
@@ -23,14 +30,32 @@ jQuery(document).ready(function(){
 <?php
 }
 
-//markup for FB in footer. this is not visible, but required.
+/**
+ * fb_footer()
+ *
+ * @package fb-connect
+ * @since 1.0
+ *
+ * markup for footer
+ * taken from here: http://developers.facebook.com/docs/guides/web
+ *
+ */
 function fb_footer(){
 ?> <div id="fb-root"></div> <?php
 }
 
-//get_facebook_cookie function
-//taken from here: http://developers.facebook.com/docs/guides/web
-//gets facebook cookie (yummy thing that is created when user is authenticated with FB in your website and destroyed when user is logged out of FB)
+/**
+ * get_facebook_cookie()
+ *
+ * @package fb-connect
+ * @since 1.0
+ *
+ * gets facebook cookie (yummy thing that is created when user is authenticated with FB in your website)
+ * taken from here: http://developers.facebook.com/docs/guides/web
+ *
+ * @return array|null
+ *
+ */
 function get_facebook_cookie($app_id, $application_secret) {
   $args = array();
   parse_str(trim($_COOKIE['fbs_' . $app_id], '\\"'), $args);
@@ -47,9 +72,17 @@ function get_facebook_cookie($app_id, $application_secret) {
   return $args;
 }
 
-//this is the main function that performs the login or user creation process
+/**
+ * fb_login_user()
+ *
+ * @package fb-connect
+ * @since 1.0
+ *
+ * this is the main function that performs the login or user creation process
+ *
+ * @return true
+ */
 function fb_login_user(){
-	//only do when user is not logged in
 	global $wpdb;
 	//@todo: investigate: does this gets included doing regular request?
 	require_once( ABSPATH . 'wp-includes/registration.php' );

@@ -1,5 +1,13 @@
 <?php
-//shottcode function
+/**
+ * fb_login()
+ *
+ * @package fb-connect
+ * @since 1.0
+ *
+ * shortcode for FB connect button. this is used in widget so keep that in mind if you change anything here
+ *
+ */
 function fb_login($atts){
 	global $wpdb;
 	extract(shortcode_atts(array(

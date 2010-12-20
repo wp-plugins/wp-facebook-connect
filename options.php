@@ -1,5 +1,13 @@
 <?php
-//notification to set the settings
+/**
+ * fb_connect_settings_missing()
+ *
+ * @package fb-connect
+ * @since 1.0
+ *
+ * notification to set the settings before using plugin
+ *
+ */
 function fb_connect_settings_missing(){ 
 	?>
 	<div class="error">
@@ -8,19 +16,44 @@ function fb_connect_settings_missing(){
 	<?php
 }
 
-//add options page and register settings
+/**
+ * fb_connect_menu()
+ *
+ * @package fb-connect
+ * @since 1.0
+ *
+ * add options page and register settings
+ *
+ */
 function fb_connect_menu() {
 	add_options_page('FB Connect options', 'FB Connect', 'manage_options', 'fb_connect_options', 'fb_connect_options');
 	add_action( 'admin_init', 'register_fb_connect_mysettings' );
 }
 
-//register settings
+
+/**
+ * register_fb_connect_mysettings()
+ *
+ * @package fb-connect
+ * @since 1.0
+ *
+ * register settings
+ *
+ */
 function register_fb_connect_mysettings(){
 	register_setting( 'fb_connect_settings', 'fbconnect_api_id' );
 	register_setting( 'fb_connect_settings', 'fbconnect_secret' );
 }
 
-//actual options page
+/**
+ * fb_connect_options()
+ *
+ * @package fb-connect
+ * @since 1.0
+ *
+ * options page
+ *
+ */
 function fb_connect_options() {
   ?>
 	<div class="wrap">
