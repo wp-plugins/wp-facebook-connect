@@ -27,10 +27,14 @@ if( FACEBOOK_SECRET == '' || FACEBOOK_APP_ID == '' ){
 	require_once($plugin_path . 'functions.php');
 	//add javascript to header
 	add_action('wp_head', 'facebook_header');
+	add_action('admin_print_footer_scripts', 'facebook_header');
 	//perform login process
 	add_action('init', 'fb_login_user');
 	//add markup to footer
 	add_action('wp_footer', 'fb_footer');
+	add_action('admin_print_footer_scripts', 'fb_footer');
+	//modify logout URL
+	add_filter('logout_url', 'fb_logout_url');
 	
 	//shortcode functions
 	require_once($plugin_path . 'shortcode.php');

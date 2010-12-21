@@ -31,6 +31,23 @@ jQuery(document).ready(function(){
 }
 
 /**
+ * fb_logout_url()
+ *
+ * @package fb-connect
+ * @since 1.0
+ *
+ * logout url for people who are logged in with FB
+ *
+ */
+function fb_logout_url($url){
+	$cookie = get_facebook_cookie(FACEBOOK_APP_ID, FACEBOOK_SECRET);
+	if($cookie)
+		return "javascript:FB.logout(function(){location.href='" . $url . "'})";
+	else
+		return $url;
+}
+
+/**
  * fb_footer()
  *
  * @package fb-connect
