@@ -123,22 +123,38 @@ function fb_login_user(){
 	    	if( is_user_logged_in() ){
     			global $current_user;
 				get_currentuserinfo();
+				$fb_uid = get_user_meta($current_user->ID, 'fb_uid', true);
+	
+				if($fb_uid == $user->id)
+					return true;
+					
 				if( $user->email == $current_user->user_email ) {
 					//if FB email is the same as WP email we don't need to do anything.
 					do_action('fb_connect_wp_fb_same_email');
+					$fb_uid = get_user_meta($current_user->ID, 'fb_uid', true);
+					if( !$fb_uid )
+						update_user_meta( $current_user->ID, 'fb_uid', $user->id );
 					return true;
 				} else {
-					//else we need to set fb_email in user meta, this will be used to identify this user
+					//else we need to set fb_uid in user meta, this will be used to identify this user
 					do_action('fb_connect_wp_fb_different_email');
-					update_user_meta( $current_user->ID, 'fb_email', $user->email );
+					$fb_uid = get_user_meta($current_user->ID, 'fb_uid', true);
+					if( !$fb_uid )
+						update_user_meta( $current_user->ID, 'fb_uid', $user->id );
+					$fb_email = get_user_meta($current_user->ID, 'fb_email', true);
+					if( !$fb_uid )	
+						update_user_meta( $current_user->ID, 'fb_email', $user->email );
 					//that's it, we don't need to do anything else, because the user is already logged in.
 					return true;
 				}
 	    	}else{
 			    //check if user has account in the website. get id
-			    $existing_user = absint($wpdb->get_var( 'SELECT `u`.`ID` FROM `' . $wpdb->users . '` `u` JOIN `' . $wpdb->usermeta . '` `m` ON `u`.`ID` = `m`.`user_id`  WHERE user_email = "' . $user->email . '" OR (`m`.`meta_key` = "fb_email" AND `m`.`meta_value` = "' . $user->email . '" ) LIMIT 1 ' ));
+			    $existing_user = absint($wpdb->get_var( 'SELECT DISTINCT `u`.`ID` FROM `' . $wpdb->users . '` `u` JOIN `' . $wpdb->usermeta . '` `m` ON `u`.`ID` = `m`.`user_id`  WHERE (`m`.`meta_key` = "fb_uid" AND `m`.`meta_value` = "' . $user->id . '" ) OR user_email = "' . $user->email . '" OR (`m`.`meta_key` = "fb_email" AND `m`.`meta_value` = "' . $user->email . '" )  LIMIT 1 ' ));
 			    //if the user exists - set cookie, do wp_login, redirect and exit
 			    if( $existing_user > 0 ){
+			    	$fb_uid = get_user_meta($existing_user, 'fb_uid', true);
+			    	if( !$fb_uid )
+			    		update_user_meta( $new_user, 'fb_uid', $user->id );
 			    	$user_info = get_userdata($existing_user);
 			    	do_action('fb_connect_fb_same_email');
 			    	wp_set_auth_cookie($existing_user, true, false);
@@ -179,6 +195,7 @@ function fb_login_user(){
 					$new_user = absint(wp_insert_user($userdata));
 					//if user created succesfully - log in and reload
 					if( $new_user > 0 ){
+						update_user_meta( $new_user, 'fb_uid', $user->id );
 						$user_info = get_userdata($new_user);
 						wp_set_auth_cookie($new_user, true, false);
 						do_action('wp_login', $user_info->user_login);
