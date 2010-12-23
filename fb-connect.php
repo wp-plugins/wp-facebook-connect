@@ -45,6 +45,11 @@ if( FACEBOOK_SECRET == '' || FACEBOOK_APP_ID == '' ){
 	require_once($plugin_path . 'widget.php');
 	//setup widget
 	add_shortcode('fb_login', 'fb_login');
+	
+	//include avatar functions
+	require_once($plugin_path . 'avatar.php');
+	//replace avatar
+	add_filter('get_avatar', 'fb_connect_replace_avatar', 5, 10);
 }
 
 //uninstal function
