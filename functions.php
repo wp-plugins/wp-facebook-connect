@@ -193,6 +193,7 @@ function fb_login_user(){
 					$userdata = apply_filters('fb_connect_new_userdata', $userdata, $user);
 					//create new user
 					$new_user = absint(wp_insert_user($userdata));
+					do_action('fb_connect_new_user', $new_user);
 					//if user created succesfully - log in and reload
 					if( $new_user > 0 ){
 						update_user_meta( $new_user, 'fb_uid', $user->id );
