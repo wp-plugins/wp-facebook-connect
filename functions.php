@@ -182,7 +182,7 @@ function fb_login_user(){
 					$userdata = array(
 						'user_pass'		=>	wp_generate_password(),
 						'user_login'	=>	$username,
-						'user_nicename'	=>	$user->name,
+						'user_nicename'	=>	$username,
 						'user_email'	=>	$user->email,
 						'display_name'	=>	$user->name,
 						'nickname'		=>	$username,
