@@ -21,7 +21,7 @@ class FB_Connect_Widget extends WP_Widget {
               <?php echo $before_widget; ?>
                   <?php if ( $title )
                         echo $before_title . $title . $after_title; ?>
-                  <div style="text-align:center; margin-bottom:10px;"><?php do_shortcode("[fb_login size='$size' connect_text='$connect_text' login_text='$login_text' logout_text='$logout_text']"); ?></div>
+                  <div><?php do_shortcode("[fb_login size='$size' connect_text='$connect_text' login_text='$login_text' logout_text='$logout_text']"); ?></div>
               <?php echo $after_widget; ?>
         <?php
     }
