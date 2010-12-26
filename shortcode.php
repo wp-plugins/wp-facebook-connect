@@ -17,12 +17,6 @@ function fb_login($atts){
 		'connect_text' => 'Connect'
 	), $atts));
 	
-	//got "xlarge" instead of xlarge and that screwed things up. I thought you supposed to write shortcode attributes in quotes. Maybe not.
-	$size = str_replace('"', '', $size);
-	$login_text = str_replace('"', '', $login_text);
-	$logout_text = str_replace('"', '', $logout_text);
-	$connect_text = str_replace('"', '', $connect_text);
-	
 	$cookie = get_facebook_cookie(FACEBOOK_APP_ID, FACEBOOK_SECRET);
 	$perms = apply_filters('fb_connect_perms', array('email'));
 	//only show facebook connect when user is not logged in
