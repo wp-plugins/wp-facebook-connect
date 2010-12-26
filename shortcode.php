@@ -23,7 +23,7 @@ function fb_login($atts){
 		if( $cookie ) {
 			do_action('fb_connect_button_fb_wp');
 			?>
-			<a class="fb_button fb_button_<?php echo $size; ?>" href="javascript:FB.logout(function(){location.href='<?php echo wp_logout_url( get_bloginfo('url') ) ?>'})">
+			<a class="fb_button fb_button_<?php echo $size; ?>" href="<?php echo wp_logout_url( get_bloginfo('url') ); ?>">
 				<span class="fb_button_text">
 					<?php echo $logout_text; ?>
 		    	</span>
