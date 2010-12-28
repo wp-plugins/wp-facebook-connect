@@ -2,8 +2,8 @@
 Contributors: mufasa, valentinas
 Tags: facebook, facebook connect, fb connect, fbconnect, fb-connect, login.
 Requires at least: 3.0
-Tested up to: 3.01
-Stable tag: 1.2
+Tested up to: 3.03
+Stable tag: 1.3
 
 A beautifully crafted light weight Facebook Connect Plugin that uses the new Facebook API to create WordPress user accounts.
 
@@ -45,6 +45,12 @@ You can place this anywhere in post or page. You can also place the shortcode in
 `<?php do_shortcode("[fb_login size='xlarge' login_text='Logout' logout_text='Logout']"); ?>`
 
 == Changelog ==
+
+= 1.3 =
+* Fix $user->nicename bug that caused strange buddypress behavior
+* Fix "Login process failed bug" (when login process fails - echo that, but don't wp_die())
+* Fix logout url bug
+* Remove center style for widget and let theme handle that
 
 = 1.2 =
 * Add another hook after new user is created in case you want to set some additional meta
