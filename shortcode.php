@@ -40,10 +40,10 @@ function fb_login($atts){
 		}
 	} else {
 		if( $cookie ) {
-			//this will never happen, because there is login process on 
+			//this should never happen, because there is login process on 
 			//INIT and by this time you should either be loged in or have new user created and loged in
 			do_action('fb_connect_button_fb_nowp');
-			wp_die('Facebook Connect error: login process failed!');
+			echo('Facebook Connect error: login process failed!');
 		} else {
 			do_action('fb_connect_button_nofb_nowp');
 			?>
