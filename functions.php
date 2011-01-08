@@ -159,7 +159,11 @@ function fb_login_user(){
 			    	do_action('fb_connect_fb_same_email');
 			    	wp_set_auth_cookie($existing_user, true, false);
 			    	do_action('wp_login', $user_info->user_login);
-			    	wp_redirect(wp_get_referer());
+			    			    if (wp_get_referer()) {
+	wp_redirect(wp_get_referer());
+} else {
+	wp_redirect( $_SERVER['REQUEST_URI'] );
+}
 			    	exit();
 			    //if user don't exist - create one and do all the same stuff: cookie, wp_login, redirect, exit
 				} else {
