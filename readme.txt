@@ -46,6 +46,9 @@ You can place this anywhere in post or page. You can also place the shortcode in
 
 == Changelog ==
 
+= 1.4 =
+* Fix scripts: load jquery before everything and use wp_enqueue_scripts for facebook JS
+
 = 1.3 =
 * Fix $user->nicename bug that caused strange buddypress behavior
 * Fix "Login process failed bug" (when login process fails - echo that, but don't wp_die())
