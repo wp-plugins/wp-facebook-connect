@@ -26,8 +26,7 @@ if( FACEBOOK_SECRET == '' || FACEBOOK_APP_ID == '' ){
 	//include main functions
 	require_once($plugin_path . 'functions.php');
 	//add javascript to header
-	add_action('wp_head', 'facebook_header');
-	add_action('admin_print_footer_scripts', 'facebook_header');
+	add_action('init', 'facebook_header');
 	//perform login process
 	add_action('init', 'fb_login_user');
 	//add markup to footer

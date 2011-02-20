@@ -9,25 +9,9 @@
  * taken from here: http://developers.facebook.com/docs/guides/web
  *
  */
-function facebook_header(){ 
-?>
-<script src="http://connect.facebook.net/en_US/all.js"></script>
-<script>
-jQuery(document).ready(function(){
-	  FB.init({appId: '<?php echo FACEBOOK_APP_ID; ?>', status: true,
-	           cookie: true, xfbml: true});
-	  FB.Event.subscribe('auth.sessionChange', function(response) {
-	    if (response.session) {
-	    jQuery('body').html('');
-	      window.location.href=window.location.href;
-	    } else {
-	    jQuery('body').html('');
-	      window.location.href=window.location.href;
-	    }
-	  });
-});
- </script>
-<?php
+function facebook_header(){
+	wp_enqueue_script( 'facebook_connect_js_functions', 'http://connect.facebook.net/en_US/all.js', array('jquery') );
+	wp_enqueue_script( 'facebook_connect_js', plugins_url('/js.php', __FILE__), array('jquery', 'facebook_connect_js_functions') );
 }
 
 /**
