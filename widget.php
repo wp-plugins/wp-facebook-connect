@@ -14,9 +14,9 @@ class FB_Connect_Widget extends WP_Widget {
         extract( $args );
         $title = apply_filters('widget_title', $instance['title']);
         $size = $instance['size']?$instance['size']:'medium';
-        $login_text = $instance['login_text']?$instance['login_text']:'Login';
-        $logout_text = $instance['logout_text']?$instance['logout_text']:'Logout';
-        $connect_text = $instance['connect_text']?$instance['connect_text']:'Connect';
+        $login_text = $instance['login_text']?$instance['login_text']:__('Login', 'wp-facebook-connect');
+        $logout_text = $instance['logout_text']?$instance['logout_text']:__('Logout', 'wp-facebook-connect');
+        $connect_text = $instance['connect_text']?$instance['connect_text']:__('Connect', 'wp-facebook-connect');
         ?>
               <?php echo $before_widget; ?>
                   <?php if ( $title )
