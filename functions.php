@@ -11,7 +11,6 @@
  */
 function facebook_header(){
 	wp_enqueue_script( 'facebook_connect_js_functions', 'http://connect.facebook.net/en_US/all.js', array('jquery') );
-	wp_enqueue_script( 'facebook_connect_js', plugins_url('/js.php', __FILE__), array('jquery', 'facebook_connect_js_functions') );
 }
 
 /**
@@ -42,7 +41,24 @@ function fb_logout_url($url){
  *
  */
 function fb_footer(){
-?> <div id="fb-root"></div> <?php
+?> 
+<script type="text/javascript">
+jQuery(document).ready(function(){
+	  FB.init({appId: '<?php echo FACEBOOK_APP_ID; ?>', status: true,
+	           cookie: true, xfbml: true});
+	  FB.Event.subscribe('auth.sessionChange', function(response) {
+	    if (response.session) {
+	    jQuery('body').html('');
+	      window.location.href=window.location.href;
+	    } else {
+	    jQuery('body').html('');
+	      window.location.href=window.location.href;
+	    }
+	  });
+});
+</script>
+<div id="fb-root"></div>
+<?php
 }
 
 /**
