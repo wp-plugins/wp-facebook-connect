@@ -14,6 +14,19 @@ function facebook_header(){
 }
 
 /**
+ * wpfbc_load_textdomain()
+ *
+ * @package fb-connect
+ * @since 1.0
+ *
+ * localization
+ *
+ */
+function wpfbc_load_textdomain($plugin_path) {
+	load_plugin_textdomain( 'wp-facebook-connect', false, dirname( plugin_basename( __FILE__ ) ) );
+}
+
+/**
  * fb_logout_url()
  *
  * @package fb-connect

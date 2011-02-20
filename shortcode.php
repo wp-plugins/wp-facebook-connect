@@ -12,9 +12,9 @@ function fb_login($atts){
 	global $wpdb;
 	extract(shortcode_atts(array(
 		'size' => 'medium',
-		'login_text' => 'Login',
-		'logout_text' => 'Logout',
-		'connect_text' => 'Connect'
+		'login_text' => __('Login', 'wp-facebook-connect'),
+		'logout_text' => __('Logout', 'wp-facebook-connect'),
+		'connect_text' => __('Connect', 'wp-facebook-connect')
 	), $atts));
 	
 	$cookie = get_facebook_cookie(FACEBOOK_APP_ID, FACEBOOK_SECRET);
@@ -43,7 +43,7 @@ function fb_login($atts){
 			//this should never happen, because there is login process on 
 			//INIT and by this time you should either be loged in or have new user created and loged in
 			do_action('fb_connect_button_fb_nowp');
-			echo('Facebook Connect error: login process failed!');
+			_e('Facebook Connect error: login process failed!', 'wp-facebook-connect');
 		} else {
 			do_action('fb_connect_button_nofb_nowp');
 			?>
