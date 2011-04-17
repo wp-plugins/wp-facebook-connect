@@ -128,8 +128,6 @@ function fb_login_user(){
 	    	//I put it here just in case of API changes or some other disaster, like wrong API key or secret
 		    if( !isset($user->email) || empty($user->email) ){
 		    	do_action('fb_connect_get_email_error');
-		    	//do not use wp_die here, because it adds styles which can mess up the whole looks of the site
-		    	die("Error: failed to get your email from Facebook!");
 		    }
 
 	    	//if user is logged in, then we just need to associate FB account with WordPress account
@@ -220,7 +218,7 @@ function fb_login_user(){
 				    	wp_redirect(wp_get_referer());
 				    	exit();
 					} else {
-						wp_die('Facebook Connect: Error creating new user!');
+						echo('Facebook Connect: Error creating new user!');
 					}
 				}	    	
 	    	}
